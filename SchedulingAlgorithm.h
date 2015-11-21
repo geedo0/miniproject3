@@ -87,3 +87,14 @@ private:
 	int HRFSortedIndex[SIZE_OF_HR_MATRIX];
 
 };
+
+class BestEdpSchedulingAlgorithm : public SchedulingAlgorithm
+{
+public:
+	BestEdpSchedulingAlgorithm(Server* (*ps)[SIZE_OF_HR_MATRIX][NUMBER_OF_SERVERS_IN_ONE_HR_MATRIX_CELL_MAX], queue<VirtualMachine*>* pqvm, const FLOATINGPOINT (*matrixD)[SIZE_OF_HR_MATRIX][SIZE_OF_HR_MATRIX]);
+	void AssignVMs();
+
+private:
+	int HRFSortedIndex[SIZE_OF_HR_MATRIX];
+
+};

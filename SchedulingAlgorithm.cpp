@@ -334,3 +334,35 @@ ASSIGNING_FINISHED:
 		pqVMsToGo->pop();
 	}
 }
+
+BestEdpSchedulingAlgorithm::BestEdpSchedulingAlgorithm(Server* (*ps)[SIZE_OF_HR_MATRIX][NUMBER_OF_SERVERS_IN_ONE_HR_MATRIX_CELL_MAX], queue<VirtualMachine*>* pqvm, const FLOATINGPOINT (*matrixD)[SIZE_OF_HR_MATRIX][SIZE_OF_HR_MATRIX])
+{
+	fprintf(stderr, "Created Best EDP Algorithm\n");
+	ppServers = ps;
+	pqVMsToGo = pqvm;
+	pHeatRecirculationMatrixD = matrixD;
+}
+
+void BestEdpSchedulingAlgorithm::AssignVMs()
+{
+	// assign VMs to Servers
+	while (!pqVMsToGo->empty()) {
+		// assign with qWaitingVMs.top()
+		int bestI, bestJ = -1;
+		FLOATINGPOINT bestAvailability = 1000000.0; // any big number
+		for (int i=0; i<NUMBER_OF_CHASSIS; ++i) {
+			for (int j=0; j<NUMBER_OF_SERVERS_IN_ONE_CHASSIS; ++j) {
+				if ((*ppServers)[i][j]->IsOFF()) continue;
+				FLOATINGPOINT sumofVM = (*ppServers)[i][j]->VMRequiresThisMuchCPUScale();
+				if (sumofVM < bestAvailability) { // assign to the machine with least jobs
+					bestI = i; bestJ = j; 
+					bestAvailability = sumofVM;
+				}
+			}
+		}
+		if (bestI < 0 || bestJ < 0)
+			cout << "Error: No servers to assign a VM" << endl;
+		(*ppServers)[bestI][bestJ]->AssignOneVM(pqVMsToGo->front());
+		pqVMsToGo->pop();
+	}
+}

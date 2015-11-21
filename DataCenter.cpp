@@ -42,6 +42,8 @@ DataCenter::DataCenter(JobQueue* q)
 		pSchedulingAlgorithm = new MinHRSchedulingAlgorithm(&pServers, &qWaitingVMs, &HeatRecirculationMatrixD);
 	else if (SCHEDULING_ALGORITHM == "center_rack_first")
 		pSchedulingAlgorithm = new CenterRackFirstSchedulingAlgorithm(&pServers, &qWaitingVMs, &HeatRecirculationMatrixD);
+	else if (SCHEDULING_ALGORITHM == "best_edp")
+		pSchedulingAlgorithm = new BestEdpSchedulingAlgorithm(&pServers, &qWaitingVMs, &HeatRecirculationMatrixD);
 	else {
 		cout << "Error: unknown scheduling algorithm. Use default value (best_performance)" << endl;
 		pSchedulingAlgorithm = new BestPerformanceSchedulingAlgorithm(&pServers, &qWaitingVMs, &HeatRecirculationMatrixD);

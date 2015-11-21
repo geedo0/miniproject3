@@ -1,0 +1,8 @@
+#!/bin/bash -ex
+WORKLOADS="/home/geedo/ec700/SWFloads/ShortTraces"
+OUTPUT_DIR="/home/geedo/ec700/data"
+LOG_INTERVAL=10000
+
+echo "NASA with best_edp"
+
+./SimWare ${WORKLOADS}/NASA-iPSC-short.swf -NUMBER_OF_CORES_IN_ONE_SERVER 1 -NUMBER_OF_SERVERS_IN_ONE_CHASSIS 2 -PERIODIC_LOG_INTERVAL ${LOG_INTERVAL} -SCHEDULING_ALGORITHM best_edp
