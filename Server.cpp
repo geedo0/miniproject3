@@ -89,7 +89,6 @@ FLOATINGPOINT Server::GetFanPower()
 
 FLOATINGPOINT Server::MaxUtilization()
 {
-	if (isOFF) return 0.0;
 	return (FLOATINGPOINT)currentPerformanceStateOutof100/100.0;
 }
 
