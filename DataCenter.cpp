@@ -22,6 +22,9 @@ DataCenter::DataCenter(JobQueue* q)
 	currentSupplyTemp = LOWEST_SUPPLY_TEMPERATURE;
 	currentSupplyTempBase = LOWEST_SUPPLY_TEMPERATURE;
 
+	currentDataCenterMaxUtilization = BASE_UTILIZATION;
+	BEST_EDP_POLICY = false;
+	
 	pJobQueue = q;
 	clock = 0;
 	peakPower = 0.0;
@@ -42,8 +45,10 @@ DataCenter::DataCenter(JobQueue* q)
 		pSchedulingAlgorithm = new MinHRSchedulingAlgorithm(&pServers, &qWaitingVMs, &HeatRecirculationMatrixD);
 	else if (SCHEDULING_ALGORITHM == "center_rack_first")
 		pSchedulingAlgorithm = new CenterRackFirstSchedulingAlgorithm(&pServers, &qWaitingVMs, &HeatRecirculationMatrixD);
-	else if (SCHEDULING_ALGORITHM == "best_edp")
+	else if (SCHEDULING_ALGORITHM == "best_edp") {
+		BEST_EDP_POLICY = true;
 		pSchedulingAlgorithm = new BestEdpSchedulingAlgorithm(&pServers, &qWaitingVMs, &HeatRecirculationMatrixD);
+	}
 	else {
 		cout << "Error: unknown scheduling algorithm. Use default value (best_performance)" << endl;
 		pSchedulingAlgorithm = new BestPerformanceSchedulingAlgorithm(&pServers, &qWaitingVMs, &HeatRecirculationMatrixD);
@@ -93,6 +98,32 @@ void DataCenter::EveryASecond(void)
 					qWaitingVMs.push(pvm);
 				}
 			}
+		}
+	}
+
+	if(BEST_EDP_POLICY) {
+		/*
+			1. Get some representation of the requirements of the whole datacenter
+			 - The average of all servers' requirements
+			2. Check if the requirements are met by our current cap plus some threshold
+			3. If the requirements exceed the threshold increase the current cap and apply globally
+			4. Otherwise the uniform scheduler must live with it
+			5. Also check if our threshold is too high
+		*/
+		int average_utilization = AverageUtilization();
+		if(average_utilization > (currentDataCenterMaxUtilization + POSITIVE_THRESHOLD)) {
+			currentDataCenterMaxUtilization += POSITIVE_DELTA;
+			currentDataCenterMaxUtilization = currentDataCenterMaxUtilization > 100 ? 100 : currentDataCenterMaxUtilization;
+			for (int i=0; i<NUMBER_OF_CHASSIS; ++i)
+				for (int j=0; j<NUMBER_OF_SERVERS_IN_ONE_CHASSIS; ++j)
+					pServers[i][j]->SetMaxUtilization(currentDataCenterMaxUtilization);
+		}
+		else if(average_utilization < (currentDataCenterMaxUtilization - NEGATIVE_THRESHOLD)) {
+			currentDataCenterMaxUtilization -= NEGATIVE_DELTA;
+			currentDataCenterMaxUtilization = currentDataCenterMaxUtilization < 0 ? 0 : currentDataCenterMaxUtilization;
+			for (int i=0; i<NUMBER_OF_CHASSIS; ++i)
+				for (int j=0; j<NUMBER_OF_SERVERS_IN_ONE_CHASSIS; ++j)
+					pServers[i][j]->SetMaxUtilization(currentDataCenterMaxUtilization);
 		}
 	}
 
@@ -239,15 +270,15 @@ FLOATINGPOINT DataCenter::TotalComputingPower()
 	return retval;
 }
 
-FLOATINGPOINT DataCenter::TotalVMRequiresThisMuchCPUScale()
+int DataCenter::AverageUtilization()
 {
-	FLOATINGPOINT retval = 0.0;
+	FLOATINGPOINT total = 0.0;
 	for (int i=0; i<NUMBER_OF_CHASSIS; ++i)
 		for (int j=0; j<NUMBER_OF_SERVERS_IN_ONE_CHASSIS; ++j)
-			retval += pServers[i][j]->VMRequiresThisMuchCPUScale();
+			total += pServers[i][j]->VMRequiresThisMuchUtilization();
+	int retval = (int) 100 * (total / (NUMBER_OF_CHASSIS*NUMBER_OF_SERVERS_IN_ONE_CHASSIS));
 	return retval;
 }
-
 
 FLOATINGPOINT DataCenter::TotalPowerDrawFromComputingMachines()
 {
