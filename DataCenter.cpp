@@ -110,15 +110,15 @@ void DataCenter::EveryASecond(void)
 			4. Otherwise the uniform scheduler must live with it
 			5. Also check if our threshold is too high
 		*/
-		int average_utilization = AverageUtilization();
-		if(average_utilization > (currentDataCenterMaxUtilization + POSITIVE_THRESHOLD)) {
+		int averageUtilization = AverageUtilization();
+		if(averageUtilization >= (currentDataCenterMaxUtilization + POSITIVE_THRESHOLD)) {
 			currentDataCenterMaxUtilization += POSITIVE_DELTA;
 			currentDataCenterMaxUtilization = currentDataCenterMaxUtilization > 100 ? 100 : currentDataCenterMaxUtilization;
 			for (int i=0; i<NUMBER_OF_CHASSIS; ++i)
 				for (int j=0; j<NUMBER_OF_SERVERS_IN_ONE_CHASSIS; ++j)
 					pServers[i][j]->SetServerPowerState(currentDataCenterMaxUtilization);
 		}
-		else if(average_utilization < (currentDataCenterMaxUtilization - NEGATIVE_THRESHOLD)) {
+		else if(averageUtilization <= (currentDataCenterMaxUtilization - NEGATIVE_THRESHOLD)) {
 			currentDataCenterMaxUtilization -= NEGATIVE_DELTA;
 			currentDataCenterMaxUtilization = currentDataCenterMaxUtilization < 0 ? 0 : currentDataCenterMaxUtilization;
 			for (int i=0; i<NUMBER_OF_CHASSIS; ++i)
