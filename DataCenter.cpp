@@ -239,6 +239,16 @@ FLOATINGPOINT DataCenter::TotalComputingPower()
 	return retval;
 }
 
+FLOATINGPOINT DataCenter::TotalVMRequiresThisMuchCPUScale()
+{
+	FLOATINGPOINT retval = 0.0;
+	for (int i=0; i<NUMBER_OF_CHASSIS; ++i)
+		for (int j=0; j<NUMBER_OF_SERVERS_IN_ONE_CHASSIS; ++j)
+			retval += pServers[i][j]->VMRequiresThisMuchCPUScale();
+	return retval;
+}
+
+
 FLOATINGPOINT DataCenter::TotalPowerDrawFromComputingMachines()
 {
 	FLOATINGPOINT retval = 0.0;

@@ -93,6 +93,19 @@ FLOATINGPOINT Server::MaxUtilization()
 	return (FLOATINGPOINT)currentPerformanceStateOutof100/100.0;
 }
 
+void Server::SetMaxUtilization(int max_utilization)
+{
+	if (max_utilization > 100) currentPerformanceStateOutof100 = 100;
+	if (max_utilization < 0) currentPerformanceStateOutof100 = 0;
+	currentPerformanceStateOutof100 = max_utilization;
+}
+
+int Server::GetMaxUtilization()
+{
+	if (isOFF) return 0.0;
+	return currentPerformanceStateOutof100;
+}
+
 FLOATINGPOINT Server::CurrentUtilization()
 {
 	if (isOFF) return 0.0;
