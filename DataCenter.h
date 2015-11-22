@@ -13,6 +13,13 @@
 
 using namespace std;
 
+//Tuning Parameters
+#define BASE_UTILIZATION	20
+#define POSITIVE_THRESHOLD	20
+#define NEGATIVE_THRESHOLD	20
+#define POSITIVE_DELTA		10
+#define NEGATIVE_DELTA		10
+
 extern int NUMBER_OF_SERVERS_IN_ONE_CHASSIS;
 extern bool TEMPERATURE_SENSING_PERFORMANCE_CAPPING;
 extern int TEMPERATURE_SENSING_PERFORMANCE_CAPPING_AGGRESSIVENESS;
@@ -64,15 +71,18 @@ private:
 	FLOATINGPOINT perServerComputingPowerLog[SIZE_OF_HR_MATRIX];
 	FLOATINGPOINT perDataCenterUtilization;
 	FLOATINGPOINT peakPower;
+	int currentDataCenterMaxUtilization;
 
 	FLOATINGPOINT TotalComputingPower();
-	FLOATINGPOINT TotalVMRequiresThisMuchCPUScale();
+	int AverageUtilization();
 	void RecalculateHeatDistribution();
 	FLOATINGPOINT TotalPowerDrawFromComputingMachines();
 	FLOATINGPOINT TotalPowerDrawFromServerFans();
 	FLOATINGPOINT CalculateCurrentCRACPower(FLOATINGPOINT totalPowerDrawIT);
 	int ModedAirTravelTimeFromCRAC[SIZE_OF_HR_MATRIX];
 	FLOATINGPOINT CRACDischargeAirTempChangeRate;
+
+	bool BEST_EDP_POLICY;
 };
 
 /*
