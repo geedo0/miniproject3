@@ -6,6 +6,7 @@ Server::Server(unsigned int cpuGen)
 	howManySecondsOverEmergencyTemp = 0;
 	howManyTimesDVFSChanged = 0;
 	currentPerformanceStateOutof100 = 100;
+	preferredPowerState = 100;
 	currentPowerDraw = 0.0;
 	currentFanPowerDraw = 0.0;
 	vRunningVMs.clear();
@@ -93,17 +94,14 @@ FLOATINGPOINT Server::MaxUtilization()
 	return (FLOATINGPOINT)currentPerformanceStateOutof100/100.0;
 }
 
-void Server::SetMaxUtilization(int max_utilization)
+void Server::SetServerPowerState(int max_utilization)
 {
-	if (max_utilization > 100) currentPerformanceStateOutof100 = 100;
-	if (max_utilization < 0) currentPerformanceStateOutof100 = 0;
-	currentPerformanceStateOutof100 = max_utilization;
+	preferredPowerState = max_utilization;
 }
 
-int Server::GetMaxUtilization()
+int Server::GetServerPowerState()
 {
-	if (isOFF) return 0.0;
-	return currentPerformanceStateOutof100;
+	return preferredPowerState;
 }
 
 FLOATINGPOINT Server::CurrentUtilization()
@@ -203,7 +201,7 @@ void Server::RecalculatePerformanceByTemperature()
 	FLOATINGPOINT inletTempNow = CurrentInletTemperature();
 
 	if (inletTempNow <= (EMERGENCY_TEMPERATURE))
-		currentPerformanceStateOutof100 = 100;
+		currentPerformanceStateOutof100 = preferredPowerState;
 	else {
 		currentPerformanceStateOutof100 = 100;
 		howManySecondsOverEmergencyTemp++;

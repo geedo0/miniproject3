@@ -15,9 +15,9 @@ using namespace std;
 
 //Tuning Parameters
 #define BASE_UTILIZATION	20
-#define POSITIVE_THRESHOLD	20
+#define POSITIVE_THRESHOLD	10
 #define NEGATIVE_THRESHOLD	20
-#define POSITIVE_DELTA		10
+#define POSITIVE_DELTA		20
 #define NEGATIVE_DELTA		10
 
 extern int NUMBER_OF_SERVERS_IN_ONE_CHASSIS;

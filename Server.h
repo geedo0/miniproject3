@@ -43,8 +43,8 @@ public:
 	FLOATINGPOINT CurrentAddedTemperature();
 	void SetCPUGeneration(unsigned int gen);
 	//Work with the currentPerformanceStateOutof100 value
-	void SetMaxUtilization(int max_utilization);
-	int GetMaxUtilization();
+	void SetServerPowerState(int max_utilization);
+	int GetServerPowerState();
 
 private:
 	unsigned int cpuGeneration;
@@ -59,6 +59,7 @@ private:
 	FLOATINGPOINT currentCPUPowerFactor;
 	FLOATINGPOINT currentPerformanceFactor;
 	int currentPerformanceStateOutof100;
+	int preferredPowerState;
 	FLOATINGPOINT supplyTempTimingBuffer[SIZE_OF_HEAT_TIMING_BUFFER];
 	FLOATINGPOINT additionalHeatTimingBuffer[SIZE_OF_HEAT_TIMING_BUFFER];
 	FLOATINGPOINT cpuTDP;

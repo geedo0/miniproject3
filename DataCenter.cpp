@@ -116,14 +116,14 @@ void DataCenter::EveryASecond(void)
 			currentDataCenterMaxUtilization = currentDataCenterMaxUtilization > 100 ? 100 : currentDataCenterMaxUtilization;
 			for (int i=0; i<NUMBER_OF_CHASSIS; ++i)
 				for (int j=0; j<NUMBER_OF_SERVERS_IN_ONE_CHASSIS; ++j)
-					pServers[i][j]->SetMaxUtilization(currentDataCenterMaxUtilization);
+					pServers[i][j]->SetServerPowerState(currentDataCenterMaxUtilization);
 		}
 		else if(average_utilization < (currentDataCenterMaxUtilization - NEGATIVE_THRESHOLD)) {
 			currentDataCenterMaxUtilization -= NEGATIVE_DELTA;
 			currentDataCenterMaxUtilization = currentDataCenterMaxUtilization < 0 ? 0 : currentDataCenterMaxUtilization;
 			for (int i=0; i<NUMBER_OF_CHASSIS; ++i)
 				for (int j=0; j<NUMBER_OF_SERVERS_IN_ONE_CHASSIS; ++j)
-					pServers[i][j]->SetMaxUtilization(currentDataCenterMaxUtilization);
+					pServers[i][j]->SetServerPowerState(currentDataCenterMaxUtilization);
 		}
 	}
 
