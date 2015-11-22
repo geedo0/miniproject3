@@ -42,6 +42,9 @@ public:
 	FLOATINGPOINT CurrentInletTemperature();
 	FLOATINGPOINT CurrentAddedTemperature();
 	void SetCPUGeneration(unsigned int gen);
+	//Work with the currentPerformanceStateOutof100 value
+	void SetMaxUtilization(int max_utilization);
+	int GetMaxUtilization();
 
 private:
 	unsigned int cpuGeneration;

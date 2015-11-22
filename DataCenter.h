@@ -66,6 +66,7 @@ private:
 	FLOATINGPOINT peakPower;
 
 	FLOATINGPOINT TotalComputingPower();
+	FLOATINGPOINT TotalVMRequiresThisMuchCPUScale();
 	void RecalculateHeatDistribution();
 	FLOATINGPOINT TotalPowerDrawFromComputingMachines();
 	FLOATINGPOINT TotalPowerDrawFromServerFans();
