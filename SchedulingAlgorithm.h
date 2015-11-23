@@ -15,6 +15,7 @@ using namespace std;
 extern int NUMBER_OF_SERVERS_IN_ONE_CHASSIS;
 extern int NUMBER_OF_CHASSIS;
 extern int NUMBER_OF_CORES_IN_ONE_SERVER;
+extern int DVFS_SETTING;
 
 class SchedulingAlgorithm
 {

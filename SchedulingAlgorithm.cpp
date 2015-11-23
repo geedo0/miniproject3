@@ -364,5 +364,7 @@ void BestEdpSchedulingAlgorithm::AssignVMs()
 			cout << "Error: No servers to assign a VM" << endl;
 		(*ppServers)[bestI][bestJ]->AssignOneVM(pqVMsToGo->front());
 		pqVMsToGo->pop();
+		FLOATINGPOINT new_state = (*ppServers)[bestI][bestJ]->VMRequiresThisMuchUtilization() * DVFS_SETTING;
+		(*ppServers)[bestI][bestJ]->SetServerPowerState((int)new_state);
 	}
 }

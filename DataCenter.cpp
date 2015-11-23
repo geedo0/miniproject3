@@ -101,31 +101,32 @@ void DataCenter::EveryASecond(void)
 		}
 	}
 
-	if(BEST_EDP_POLICY) {
-		/*
-			1. Get some representation of the requirements of the whole datacenter
-			 - The average of all servers' requirements
-			2. Check if the requirements are met by our current cap plus some threshold
-			3. If the requirements exceed the threshold increase the current cap and apply globally
-			4. Otherwise the uniform scheduler must live with it
-			5. Also check if our threshold is too high
-		*/
-		int averageUtilization = AverageUtilization();
-		if(averageUtilization >= (currentDataCenterMaxUtilization + POSITIVE_THRESHOLD)) {
-			currentDataCenterMaxUtilization += POSITIVE_DELTA;
-			currentDataCenterMaxUtilization = currentDataCenterMaxUtilization > 100 ? 100 : currentDataCenterMaxUtilization;
-			for (int i=0; i<NUMBER_OF_CHASSIS; ++i)
-				for (int j=0; j<NUMBER_OF_SERVERS_IN_ONE_CHASSIS; ++j)
-					pServers[i][j]->SetServerPowerState(currentDataCenterMaxUtilization);
-		}
-		else if(averageUtilization <= (currentDataCenterMaxUtilization - NEGATIVE_THRESHOLD)) {
-			currentDataCenterMaxUtilization -= NEGATIVE_DELTA;
-			currentDataCenterMaxUtilization = currentDataCenterMaxUtilization < 0 ? 0 : currentDataCenterMaxUtilization;
-			for (int i=0; i<NUMBER_OF_CHASSIS; ++i)
-				for (int j=0; j<NUMBER_OF_SERVERS_IN_ONE_CHASSIS; ++j)
-					pServers[i][j]->SetServerPowerState(currentDataCenterMaxUtilization);
-		}
-	}
+	// if(BEST_EDP_POLICY) {
+		
+	// 	// 1. Get some representation of the requirements of the whole datacenter
+	// 	//  - The average of all servers' requirements
+	// 	// 2. Check if the requirements are met by our current cap plus some threshold
+	// 	// 3. If the requirements exceed the threshold increase the current cap and apply globally
+	// 	// 4. Otherwise the uniform scheduler must live with it
+	// 	// 5. Also check if our threshold is too high
+		
+		
+	// 	int averageUtilization = AverageUtilization();
+	// 	if(averageUtilization >= (currentDataCenterMaxUtilization + POSITIVE_THRESHOLD)) {
+	// 		currentDataCenterMaxUtilization += POSITIVE_DELTA;
+	// 		currentDataCenterMaxUtilization = currentDataCenterMaxUtilization > 90 ? 90 : currentDataCenterMaxUtilization;
+	// 		for (int i=0; i<NUMBER_OF_CHASSIS; ++i)
+	// 			for (int j=0; j<NUMBER_OF_SERVERS_IN_ONE_CHASSIS; ++j)
+	// 				pServers[i][j]->SetServerPowerState(currentDataCenterMaxUtilization);
+	// 	}
+	// 	else if(averageUtilization <= (currentDataCenterMaxUtilization - NEGATIVE_THRESHOLD)) {
+	// 		currentDataCenterMaxUtilization -= NEGATIVE_DELTA;
+	// 		currentDataCenterMaxUtilization = currentDataCenterMaxUtilization < 0 ? 0 : currentDataCenterMaxUtilization;
+	// 		for (int i=0; i<NUMBER_OF_CHASSIS; ++i)
+	// 			for (int j=0; j<NUMBER_OF_SERVERS_IN_ONE_CHASSIS; ++j)
+	// 				pServers[i][j]->SetServerPowerState(currentDataCenterMaxUtilization);
+	// 	}
+	// }
 
 	// Assign jobs to the servers
 	pSchedulingAlgorithm->AssignVMs();

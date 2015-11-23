@@ -32,6 +32,7 @@ int SKIP_x_SECONDS = 0; // skip first ? seconds
 int FINISHES_AT_DAY = -1; // stop simulator at day FINISHES_AT_DAY
 
 string SCHEDULING_ALGORITHM = "best_performance";
+int DVFS_SETTING = 90;
 int SUPPLY_TEMPERATURE_OFFSET_ALPHA = 0; // T_trigger = T_emergency + alpha
 int CRAC_SUPPLY_TEMP_IS_CONSTANT_AT = 0; // 0 = false, use dynamic crac control
 bool INSTANT_COOL_AIR_TRAVEL_TIME = false; // true = cool air from CRAC arrives instantly to the servers
@@ -123,6 +124,10 @@ bool ParsingArguments(int argc, char* argv[])
 		else if (sw=="-SCHEDULING_ALGORITHM") {
 			optind++;
 			SCHEDULING_ALGORITHM = argv[optind];
+		}
+		else if (sw=="-DVFS_SETTING") {
+			optind++;
+			DVFS_SETTING = atoi(argv[optind]);
 		}
 		else if (sw=="-PERIODIC_LOG_INTERVAL") {
 			optind++;
