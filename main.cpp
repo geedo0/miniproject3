@@ -32,7 +32,7 @@ int SKIP_x_SECONDS = 0; // skip first ? seconds
 int FINISHES_AT_DAY = -1; // stop simulator at day FINISHES_AT_DAY
 
 string SCHEDULING_ALGORITHM = "best_performance";
-int DVFS_SETTING = 90;
+int DVFS_SETTING = 85;
 int SUPPLY_TEMPERATURE_OFFSET_ALPHA = 0; // T_trigger = T_emergency + alpha
 int CRAC_SUPPLY_TEMP_IS_CONSTANT_AT = 0; // 0 = false, use dynamic crac control
 bool INSTANT_COOL_AIR_TRAVEL_TIME = false; // true = cool air from CRAC arrives instantly to the servers
